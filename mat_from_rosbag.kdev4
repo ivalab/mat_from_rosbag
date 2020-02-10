@@ -1,0 +1,3 @@
+[Project]
+Manager=KDevCMakeManager
+Name=mat_from_rosbag
