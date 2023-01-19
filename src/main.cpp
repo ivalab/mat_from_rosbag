@@ -141,7 +141,8 @@ int main(int argc, char **argv) {
       if (m.getTopic() == odomTopic_1) {
 	nav_msgs::Odometry::ConstPtr s = m.instantiate<nav_msgs::Odometry>();
 	if (s != NULL) {
-            dataOdom_1.push_back(m.getTime().toSec());
+            // dataOdom_1.push_back(m.getTime().toSec());
+            dataOdom_1.push_back(s->header.stamp.toSec());
             dataOdom_1.push_back(s->pose.pose.position.x);
             dataOdom_1.push_back(s->pose.pose.position.y);
             dataOdom_1.push_back(s->pose.pose.position.z);
@@ -154,7 +155,8 @@ int main(int argc, char **argv) {
       else if (m.getTopic() == odomTopic_2) {
 	nav_msgs::Odometry::ConstPtr s = m.instantiate<nav_msgs::Odometry>();
 	if (s != NULL) {
-            dataOdom_2.push_back(m.getTime().toSec());
+            dataOdom_2.push_back(s->header.stamp.toSec());
+            // dataOdom_2.push_back(m.getTime().toSec());
             dataOdom_2.push_back(s->pose.pose.position.x);
             dataOdom_2.push_back(s->pose.pose.position.y);
             dataOdom_2.push_back(s->pose.pose.position.z);
