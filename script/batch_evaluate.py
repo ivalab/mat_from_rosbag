@@ -13,6 +13,7 @@ IMUS = ["mpu6000", "ADIS16448"]
 METHODS = ["ORB3"]
 
 enable_evaluation = True
+replace_old_result = False
 
 ## Please keep the following values unchanged.
 BAGFILES = Path(CLOSEDLOOP_DIR).rglob("*.bag")
@@ -62,11 +63,17 @@ def evo_evaluate(prefix, name, enable_planning_time_compenstation=False):
 
     # remove existing results
     if os.path.exists(file_result_nav):
-        cmd_rm = "rm " + file_result_nav
-        subprocess.call(cmd_rm, shell=True)
+        if replace_old_result:
+            cmd_rm = "rm " + file_result_nav
+            subprocess.call(cmd_rm, shell=True)
+        else:
+            return
     if os.path.exists(file_result_est):
-        cmd_rm = "rm " + file_result_est
-        subprocess.call(cmd_rm, shell=True)
+        if replace_old_result:
+            cmd_rm = "rm " + file_result_est
+            subprocess.call(cmd_rm, shell=True)
+        else:
+            return
 
     if enable_planning_time_compenstation:
         act = np.loadtxt(file_act)
@@ -79,18 +86,14 @@ def evo_evaluate(prefix, name, enable_planning_time_compenstation=False):
         file_plan = file_plan.replace("_arr_plan", "_arr_plan_comp")
         np.savetxt(file_plan, plan)
 
-    # run evaluation
+    # run evaluation (no alignment or scale correction)
     print("Evaluating navigation error ...")
-    cmd_eval = (
-        "evo_ape tum" + " " + file_plan + " " + file_act + " " + "-va --align_origin --save_results " + file_result_nav
-    )
+    cmd_eval = "evo_ape tum" + " " + file_plan + " " + file_act + " " + "-v --save_results " + file_result_nav
     print(cmd_eval)
     subprocess.call(cmd_eval, shell=True)
 
     print("Evaluating estimation error ...")
-    cmd_eval = (
-        "evo_ape tum" + " " + file_act + " " + file_est + " " + "-va --align_origin --save_results " + file_result_est
-    )
+    cmd_eval = "evo_ape tum" + " " + file_act + " " + file_est + " " + "-v --save_results " + file_result_est
     subprocess.call(cmd_eval, shell=True)
 
 

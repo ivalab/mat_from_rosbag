@@ -73,8 +73,8 @@ for method in MethodPool:
                         array_et = np.loadtxt(file_et)
                         acc_duration = array_et[-1, 0] - array_et[0, 0]
                         if acc_duration < exp_duration * TRACKING_THRESH:
-                            print(f"tracking failed: {file_et}, tracking ratio: {acc_duration}")
-                            for file_index in range(ResultFilePool):
+                            print(f"tracking failed: {file_et}, tracking ratio: {acc_duration / exp_duration}")
+                            for file_index in range(len(ResultFilePool)):
                                 rmse_table[file_index, imu_index, vel_index, seq_index, round_index] = -1.0
 
         for file_index, file_type in enumerate(ResultFilePool):
